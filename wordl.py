@@ -13,22 +13,17 @@ NUM_GUESSES = 6
 WORDS_PATH = pathlib.Path(__file__).parent / "wordlist.txt"
 
 def main():
-    # Pre-process
     words_path = pathlib.Path(__file__).parent / "wordlist.txt"
     word = get_random_word(words_path.read_text(encoding="utf-8").split("\n"))
     guesses = ["_" * NUM_LETTERS] * NUM_GUESSES
 
-    # Process (main loop)
     with contextlib.suppress(KeyboardInterrupt):
         for idx in range(6):
             refresh_page(headline=f"Guess {idx + 1}")
             show_guesses(guesses, word)
-
             guesses[idx] = guess_word(previous_guesses=guesses[:idx])
             if guesses[idx] == word:
                 break
-
-    # Post-process
     game_over(guesses, word, guessed_correctly=guesses[idx] == word)
 
 def refresh_page(headline):
